@@ -8,4 +8,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_new_secret">Enviar um segredo</string>
+    <string name="enviar">Enviar</string>
+    <string name="desc_segredo">Escreva aqui o conteúdo do seu segredo, ele deve conter no máximo 140 caracteres. Escreva algo legal!</string>
+    <string name="titulo_segredo">Escreva o título do segredo</string>
 </resources>

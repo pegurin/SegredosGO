@@ -20,6 +20,9 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
+        android:background="#1f2d3d"
+        app:itemTextColor="@color/common_google_signin_btn_text_dark_default"
+        app:itemIconTint="@color/common_google_signin_btn_text_dark_default"
         app:menu="@menu/activity_main_drawer" />
 
 </android.support.v4.widget.DrawerLayout>
