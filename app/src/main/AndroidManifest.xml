@@ -43,8 +43,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".utils.MapFragment" />
-        <activity android:name=".activities.NewSecret"
+        <activity
+            android:name=".activities.NewSecret"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity
+            android:name=".activities.SegredoActivity"
             android:parentActivityName=".activities.MainActivity"/>
+
+
     </application>
 
 </manifest>

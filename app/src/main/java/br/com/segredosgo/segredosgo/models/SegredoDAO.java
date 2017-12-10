@@ -20,7 +20,7 @@ public class SegredoDAO extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE Segredo (id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT NOT NULL, descricao TEXT, imagem TEXT, latitude INTEGER NOT NULL, longitude INTEGER NOT NULL);";
+        String sql = "CREATE TABLE Segredo (id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT NOT NULL, descricao TEXT, imagem TEXT, latitude INTEGER NOT NULL, longitude INTEGER NOT NULL, like INTEGER, deslike INTEGER);";
         db.execSQL(sql);
     }
 
@@ -40,6 +40,8 @@ public class SegredoDAO extends SQLiteOpenHelper {
         dados.put("imagem",segredo.getImagem());
         dados.put("latitude",segredo.getLatitude());
         dados.put("longitude",segredo.getLongitude());
+        dados.put("like", segredo.getLike());
+        dados.put("deslike", segredo.getDeslike());
 
         db.insert("Segredo", null, dados);
     }
@@ -67,6 +69,8 @@ public class SegredoDAO extends SQLiteOpenHelper {
             segredo.setImagem(c.getString(c.getColumnIndex("imagem")));
             segredo.setLatitude(c.getDouble(c.getColumnIndex("latitude")));
             segredo.setLongitude(c.getDouble(c.getColumnIndex("longitude")));
+            segredo.setLike(c.getInt(c.getColumnIndex("like")));
+            segredo.setDeslike(c.getInt(c.getColumnIndex("deslike")));
 
             segredos.add(segredo);
         }
@@ -74,4 +78,32 @@ public class SegredoDAO extends SQLiteOpenHelper {
 
         return segredos;
     }
+
+    public Segredo buscaID(Long id){
+        String sql = "SELECT * FROM Segredo;";
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor c = db.rawQuery(sql, null);
+
+        Segredo segredo = new Segredo();
+        while (c.moveToNext()){
+
+            if (c.getLong(c.getColumnIndex("id")) == id) {
+
+                segredo.setId(c.getLong(c.getColumnIndex("id")));
+                segredo.setTitulo(c.getString(c.getColumnIndex("titulo")));
+                segredo.setDescricao(c.getString(c.getColumnIndex("descricao")));
+                segredo.setImagem(c.getString(c.getColumnIndex("imagem")));
+                segredo.setLatitude(c.getDouble(c.getColumnIndex("latitude")));
+                segredo.setLongitude(c.getDouble(c.getColumnIndex("longitude")));
+                segredo.setLike(c.getInt(c.getColumnIndex("like")));
+                segredo.setDeslike(c.getInt(c.getColumnIndex("deslike")));
+            }
+
+        }
+        c.close();
+
+        return segredo;
+    }
+
 }

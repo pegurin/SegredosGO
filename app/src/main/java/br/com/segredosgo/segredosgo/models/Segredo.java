@@ -11,6 +11,24 @@ public class Segredo {
     private String imagem;
     private Double latitude;
     private Double longitude;
+    private int like;
+    private int deslike;
+
+    public int getLike() {
+        return like;
+    }
+
+    public void setLike(int like) {
+        this.like = like;
+    }
+
+    public int getDeslike() {
+        return deslike;
+    }
+
+    public void setDeslike(int deslike) {
+        this.deslike = deslike;
+    }
 
     public Long getId() {
         return id;

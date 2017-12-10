@@ -69,6 +69,8 @@ public class NewSecret extends AppCompatActivity {
                 Log.v("lat", ""+segredo.getLatitude());
                 Log.v("lon", ""+segredo.getLongitude());
 
+                finish();
+
             }
         });
     }
