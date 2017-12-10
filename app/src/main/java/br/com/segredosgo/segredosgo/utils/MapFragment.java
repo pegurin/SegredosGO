@@ -29,7 +29,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
+
 import br.com.segredosgo.segredosgo.R;
+import br.com.segredosgo.segredosgo.models.Segredo;
+import br.com.segredosgo.segredosgo.models.SegredoDAO;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, LocationListener {
@@ -38,6 +42,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private View view;
     MapView mMapView;
     private LatLng latLng;
+    private List<Segredo> segredos;
 
     @Nullable
     @Override
@@ -51,6 +56,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         } catch (InflateException e) {
             Log.e("Mapa", "Inflate exception");
         }
+
+        SegredoDAO dao = new SegredoDAO(getContext());
+        segredos = dao.buscaSegredos();
+        dao.close();
+
         return view;
     }
 
@@ -64,6 +74,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         if (latLng!=null)
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+
+        if (!segredos.isEmpty()) {
+            Log.v("Log","n vazio");
+            for (int i = 0; i < segredos.size(); i++) {
+                Log.v("Log","id= "+segredos.get(i).getId());
+                Log.v("Log",""+segredos.get(i).getLongitude());
+                Log.v("Log",""+segredos.get(i).getLatitude());
+                LatLng latLng = new LatLng(segredos.get(i).getLatitude(), segredos.get(i).getLongitude());
+                googleMap.addMarker(new MarkerOptions().position(latLng).title(segredos.get(i).getTitulo()));
+            }
+        } else{
+            Log.v("Log","vazio");
+        }
 
         mMapView.onResume();
     }
