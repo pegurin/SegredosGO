@@ -27,8 +27,8 @@ public class SegredoTest {
     }
 
     @Test
-    public void setsCorrect() throws Exception {
-        testSecret.setTitulo("Segredo Teste");
-        assertEquals("Segredo Teste", testSecret.getTitulo());
+    public void setsCorrectDescription() throws Exception {
+        testSecret.setDescricao("Segredo Teste Descrição");
+        assertEquals("Segredo Teste Descrição", testSecret.getDescricao());
     }
 }
