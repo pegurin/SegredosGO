@@ -3,6 +3,7 @@ package br.com.segredosgo.segredosgo.activities;
 
 import android.content.DialogInterface;
 
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +35,8 @@ public class SegredoActivity extends AppCompatActivity {
         final SegredoDAO dao = new SegredoDAO(getApplicationContext());
         segredo = dao.buscaID(getIntent().getLongExtra("id",-1));
 
+        Log.v("Log", ""+segredo.getImagem());
+        imageView.setImageBitmap(BitmapFactory.decodeFile(segredo.getImagem()));
         txtTitulo.setText(segredo.getTitulo());
         txtDescricao.setText(segredo.getDescricao());
 
