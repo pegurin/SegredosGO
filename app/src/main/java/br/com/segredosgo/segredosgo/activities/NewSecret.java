@@ -3,9 +3,13 @@ package br.com.segredosgo.segredosgo.activities;
 import android.Manifest;
 import android.app.Service;
 import android.bluetooth.BluetoothClass;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +20,9 @@ import android.widget.EditText;
 
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.io.File;
+import java.io.IOException;
 
 import br.com.segredosgo.segredosgo.R;
 import br.com.segredosgo.segredosgo.models.Segredo;
@@ -42,6 +49,13 @@ public class NewSecret extends AppCompatActivity {
                 
             }
         });
+
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                captureSecretPhoto();
+            }
+        });
         btnEnviar.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -66,6 +80,7 @@ public class NewSecret extends AppCompatActivity {
                 Segredo segredo = new Segredo();
                 segredo.setTitulo(String.valueOf(txtTitulo.getText()));
                 segredo.setDescricao(String.valueOf(txtDescricao.getText()));
+                segredo.setImagem(captureSecretPhoto());
                 segredo.setLatitude(loc.getLatitude());
                 segredo.setLongitude(loc.getLongitude());
 
@@ -81,6 +96,21 @@ public class NewSecret extends AppCompatActivity {
 
             }
         });
+    }
+
+    @NonNull
+    private String captureSecretPhoto() {
+        File tempFile = null;
+        Uri uri = Uri.fromFile(tempFile);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        startActivityForResult(intent, 1341);
+        try {
+            tempFile = File.createTempFile("my_app", ".jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tempFile.getAbsolutePath();
     }
 }
 

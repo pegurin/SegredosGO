@@ -1,6 +1,8 @@
 package br.com.segredosgo.segredosgo.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,10 +21,34 @@ import br.com.segredosgo.segredosgo.R;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String[] INITIAL_PERMS={
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.CAMERA
+    };
+    private static final String[] CAMERA_PERMS={
+            Manifest.permission.CAMERA
+    };
+    private static final String[] CONTACTS_PERMS={
+            Manifest.permission.READ_CONTACTS
+    };
+    private static final String[] LOCATION_PERMS={
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+
+    private static final int INITIAL_REQUEST=1337;
+    private static final int CAMERA_REQUEST=INITIAL_REQUEST+1;
+    private static final int CONTACTS_REQUEST=INITIAL_REQUEST+2;
+    private static final int LOCATION_REQUEST=INITIAL_REQUEST+3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (!canAccessLocation() || !canAccessCamera()) {
+            requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -74,5 +100,17 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private boolean canAccessLocation() {
+        return(hasPermission(Manifest.permission.ACCESS_FINE_LOCATION));
+    }
+
+    private boolean canAccessCamera() {
+        return(hasPermission(Manifest.permission.CAMERA));
+    }
+
+    private boolean hasPermission(String perm) {
+        return(PackageManager.PERMISSION_GRANTED==checkSelfPermission(perm));
     }
 }
