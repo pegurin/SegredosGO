@@ -106,4 +106,69 @@ public class SegredoDAO extends SQLiteOpenHelper {
         return segredo;
     }
 
+    public Segredo buscaTitulo(String titulo){
+        String sql = "SELECT * FROM Segredo;";
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor c = db.rawQuery(sql, null);
+
+        Segredo segredo = new Segredo();
+        while (c.moveToNext()){
+
+            if (c.getString(c.getColumnIndex("titulo")).equals(titulo)) {
+
+                segredo.setId(c.getLong(c.getColumnIndex("id")));
+                segredo.setTitulo(c.getString(c.getColumnIndex("titulo")));
+                segredo.setDescricao(c.getString(c.getColumnIndex("descricao")));
+                segredo.setImagem(c.getString(c.getColumnIndex("imagem")));
+                segredo.setLatitude(c.getDouble(c.getColumnIndex("latitude")));
+                segredo.setLongitude(c.getDouble(c.getColumnIndex("longitude")));
+                segredo.setLike(c.getInt(c.getColumnIndex("like")));
+                segredo.setDeslike(c.getInt(c.getColumnIndex("deslike")));
+            }
+
+        }
+        c.close();
+
+        return segredo;
+    }
+
+    public void curtirSegredo(Long id){
+        String sql = "SELECT * FROM Segredo;";
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor c = db.rawQuery(sql, null);
+
+        Segredo segredo = new Segredo();
+        while (c.moveToNext()){
+
+            if (c.getLong(c.getColumnIndex("id")) == id) {
+                ContentValues data=new ContentValues();
+                data.put("like", c.getInt(c.getColumnIndex("like")) + 1);
+                db.update("Segredo", data,"id = "+id,null);
+            }
+
+        }
+        c.close();
+    }
+
+    public void denunciarSegredo(Long id){
+        String sql = "SELECT * FROM Segredo;";
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor c = db.rawQuery(sql, null);
+
+        Segredo segredo = new Segredo();
+        while (c.moveToNext()){
+
+            if (c.getLong(c.getColumnIndex("id")) == id) {
+                ContentValues data=new ContentValues();
+                data.put("deslike", c.getInt(c.getColumnIndex("deslike")) + 1);
+                db.update("Segredo", data,"id = "+id,null);
+            }
+
+        }
+        c.close();
+    }
+
 }

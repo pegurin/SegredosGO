@@ -29,11 +29,19 @@ public class NewSecret extends AppCompatActivity {
         setContentView(R.layout.activity_new_secret);
 
         Button btnEnviar = (Button) findViewById(R.id.btnEnviarSegredo);
+        Button btnGaleria = (Button) findViewById(R.id.btnGaleria);
+        Button btnCamera = (Button) findViewById(R.id.btnCamera);
 
         final EditText txtTitulo = (EditText) findViewById(R.id.txtTituloSegredo);
         final EditText txtDescricao = (EditText) findViewById(R.id.txtDescricaoSegredo);
 
 
+        btnGaleria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
         btnEnviar.setOnClickListener(new View.OnClickListener() {
 
             @Override

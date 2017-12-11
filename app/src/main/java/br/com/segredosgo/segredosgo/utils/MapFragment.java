@@ -73,7 +73,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap = googleMap;
         googleMap.setMyLocationEnabled(true);
 
         if (latLng!=null)
@@ -92,8 +91,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
+                        SegredoDAO dao = new SegredoDAO(getContext());
+                        Segredo segredo = dao.buscaTitulo(marker.getTitle());
+
                         Intent i = new Intent(getContext(), SegredoActivity.class);
-                        i.putExtra("id",  segredos.get(0).getId());
+                        i.putExtra("id",  segredo.getId());
                         startActivity(i);
                         return true;
                     }
@@ -102,6 +104,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         }
 
         mMapView.onResume();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!segredos.isEmpty() && mMap!=null) {
+            SegredoDAO dao = new SegredoDAO(getContext());
+            segredos = dao.buscaSegredos();
+
+            for (int i = 0; i < segredos.size(); i++) {
+                Log.v("Log","resume");
+
+                LatLng latLng = new LatLng(segredos.get(i).getLatitude(), segredos.get(i).getLongitude());
+                mMap.addMarker(new MarkerOptions().position(latLng).title(segredos.get(i).getTitulo()));
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        SegredoDAO dao = new SegredoDAO(getContext());
+                        Segredo segredo = dao.buscaTitulo(marker.getTitle());
+
+                        Intent i = new Intent(getContext(), SegredoActivity.class);
+                        i.putExtra("id",  segredo.getId());
+                        startActivity(i);
+                        return true;
+                    }
+                });
+            }
+        }
+
     }
 
     @Override
