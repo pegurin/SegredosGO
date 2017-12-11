@@ -24,6 +24,9 @@ import android.widget.ImageView;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.File;
+import java.io.IOException;
+
 import br.com.segredosgo.segredosgo.R;
 import br.com.segredosgo.segredosgo.models.Segredo;
 import br.com.segredosgo.segredosgo.models.SegredoDAO;
@@ -32,7 +35,7 @@ public class NewSecret extends AppCompatActivity {
 
     private ImageView imageView;
     private String picturePath;
-
+    private final int ACTION_IMAGE_CAPTURE_CODE = 1347;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,23 @@ public class NewSecret extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
                 startActivityForResult(intent, 1);
+            }
+        });
+
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    File tempFile = File.createTempFile("my_app", ".jpg");
+                    Uri uri = Uri.fromFile(tempFile);
+                    picturePath = tempFile.getAbsolutePath();
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                    startActivityForResult(intent, ACTION_IMAGE_CAPTURE_CODE);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
         btnEnviar.setOnClickListener(new View.OnClickListener() {
@@ -100,18 +120,20 @@ public class NewSecret extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == 1){
-            Uri selectedImage = data.getData();
-            String[] filePath = { MediaStore.Images.Media.DATA};
-            Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
-            c.moveToFirst();
-            picturePath = c.getString(c.getColumnIndex(filePath[0]));
-            c.close();
+        if (requestCode == 1 || requestCode == ACTION_IMAGE_CAPTURE_CODE) {
+            if (resultCode == RESULT_OK){
+                Uri selectedImage = data.getData();
+                String[] filePath = { MediaStore.Images.Media.DATA};
+                Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
+                c.moveToFirst();
+                picturePath = c.getString(c.getColumnIndex(filePath[0]));
+                c.close();
 
-            Log.v("Log","path="+picturePath);
-            Bitmap imagemGaleria = BitmapFactory.decodeFile(picturePath);
-            Log.v("Log", ""+imagemGaleria);
-            imageView.setImageBitmap(imagemGaleria);
+                Log.v("Log","path="+picturePath);
+                Bitmap imagemGaleria = BitmapFactory.decodeFile(picturePath);
+                Log.v("Log", ""+imagemGaleria);
+                imageView.setImageBitmap(imagemGaleria);
+            }
         }
     }
 }
